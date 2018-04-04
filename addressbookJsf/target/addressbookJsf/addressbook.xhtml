@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Addressbook</title>
+</h:head>
+<h:form id="form">
+    <p:growl id="msgs" showDetail="true"/>
+
+    <p:dataTable id="contacts" editable="true" var="contact" value="#{contactcontroller.contacts}"
+                 widgetVar="contactTable"
+                 emptyMessage="Inga kontakter hittade" filteredValue="#{service.searchResult}">
+
+        <f:facet name="header">
+            <p:outputPanel>
+                <h:outputText value="Sök Kontakter: "/>
+                <p:inputText id="globalFilter" onkeyup="PF('contactTable').filter()" style="width:200px"/>
+            </p:outputPanel>
+        </f:facet>
+
+        <p:column width="30" filterBy="#{contact.id}" headerText="Id" filterMatchMode="contains"
+                  filterStyle="width: 20px;">
+            <h:outputText value="#{contact.id}"/>
+        </p:column>
+
+        <p:column filterBy="#{contact.firstName}" headerText="Förnamn" filterMatchMode="contains">
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{contact.firstName}"/></f:facet>
+                <f:facet name="input"><p:inputText id="firstNameInput" value="#{contact.firstName}" style="width:100%"/></f:facet>
+            </p:cellEditor>
+        </p:column>
+
+        <p:column filterBy="#{contact.lastName}" headerText="Efternamn" filterMatchMode="contains">
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{contact.lastName}"/></f:facet>
+                <f:facet name="input"><p:inputText id="lastNameInput" value="#{contact.lastName}"
+                                                   style="width:100%"/></f:facet>
+            </p:cellEditor>
+        </p:column>
+
+        <p:column filterBy="#{contact.street}" headerText="Gata" filterMatchMode="contains">
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{contact.street}"/></f:facet>
+                <f:facet name="input"><p:inputText id="streetInput" value="#{contact.street}"
+                                                   style="width:100%"/></f:facet>
+            </p:cellEditor>
+        </p:column>
+
+        <p:column filterBy="#{contact.phone}" headerText="Telefon" filterMatchMode="contains">
+            <p:cellEditor>
+                <f:facet name="output"><h:outputText value="#{contact.phone}"/></f:facet>
+                <f:facet name="input"><p:inputText id="phoneInput" value="#{contact.phone}"
+                                                   style="width:100%"/></f:facet>
+            </p:cellEditor>
+        </p:column>
+
+        <p:column style="width:32px">
+            <p:rowEditor/>
+        </p:column>
+
+        <p:column style="width:50px">
+            <p:commandLink action="#{contactcontroller.delete(contact)}" update="contacts">Ta bort</p:commandLink>
+        </p:column>
+
+    </p:dataTable>
+</h:form>
+<h:form>
+    <h:form>
+        <br/>
+        <p:outputLabel value="Lägg till kontakt:"/><br/>
+        <p:outputLabel value="Förnamn"/>
+        <p:inputText value="#{contactcontroller.newContact.firstName}"/><br/>
+        <p:outputLabel value="Efternamn"/>
+        <p:inputText value="#{contactcontroller.newContact.lastName}"/><br/>
+        <p:outputLabel value="Gata"/>
+        <p:inputText value="#{contactcontroller.newContact.street}"/><br/>
+        <p:outputLabel value="Telefon"/>
+        <p:inputText value="#{contactcontroller.newContact.phone}"/><br/>
+        <p:commandButton value="Skapa kontakt" action="#{contactcontroller.createContact()}"/>
+    </h:form>
+</h:form>
+
+</html>
